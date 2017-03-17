@@ -21,12 +21,13 @@ class Telegram extends Crayner_Machine
     }
     public function sendMessage($text, $to, $q=null)
     {
-        if ($q===true) {
-            return $this->qurl($this->q."sendMessage", null, array("chat_id"=>$to,"text"=>$text));
+        $post = array("chat_id"=>$to,"text"=>$text);
+        if (is_array($q)) {
+            $post = array_merge($post,$q);
         }
-        return $this->qurl($this->q."sendMessage", null, array("chat_id"=>$to,"text"=>$text));
+        return $this->qurl($this->q."sendMessage", null, $post);
     }
-    public function sendPhoto($photo, $to, $capt=null)
+    public function sendPhoto($photo, $to, $capt=null,$q=null)
     {
         if (file_exists($photo)) {
             if (function_exists('curl_file_create')) {
@@ -37,6 +38,10 @@ class Telegram extends Crayner_Machine
         } else {
             $cFile=$photo;
         }
-        return $this->qurl($this->q."sendPhoto", null, array("chat_id"=>$to,"photo"=>$cFile,"caption"=>$capt));
+        $post = array("chat_id"=>$to,"photo"=>$cFile,"caption"=>$capt);
+        if (is_array($q)) {
+            $post = array_merge($post,$q);
+        }
+        return $this->qurl($this->q."sendPhoto", null, $post);
     }
 }

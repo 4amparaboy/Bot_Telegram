@@ -5,19 +5,22 @@ date_default_timezone_set("Asia/Jakarta");
 * @license RedAngel_PHP_Concept (c) 2017
 * @package Artificial Intelegence
 */
-include_once('tools/JadwalSholat.php');
-include_once('tools/Whois/Whois.php');
-include_once('tools/MyAnimeList.php');
-include_once('tools/SaferScript.php');
-include_once('tools/Translator.php');
-include_once('tools/Brainly.php');
-include_once('tools/Saklar.php');
-include_once('tools/TV.php');
+
+include('tools/JadwalSholat.php');
+include('tools/Whois/Whois.php');
+include('tools/MyAnimeList.php');
+include('tools/SaferScript.php');
+include('tools/Translator.php');
+include('tools/WhatAnime.php');
+include('tools/Brainly.php');
+include('tools/Saklar.php');
+include('tools/TV.php');
 use tools\JadwalSholat;
 use tools\Whois\Whois;
 use tools\MyAnimeList;
 use tools\SaferScript;
 use tools\Translator;
+use tools\WhatAnime;
 use tools\Brainly;
 use tools\Saklar;
 use tools\TV;
@@ -225,7 +228,8 @@ array(
 "lampu"=>2,
 "tv"=>3,
 "q_anime"=>1,
-"q_manga"=>1
+"q_manga"=>1,
+"whatanime"=>1,
 );
     }
     private function ttreturn($key)
@@ -383,6 +387,20 @@ array(
             $msg = "Permission Dennied : ".$actor;
         } elseif (isset($this->command[$string])) {
             switch ($string) {
+                case 'whatanime':
+                    $a = new WhatAnime($this->_msg);
+                    $a = $a->fetch_info();
+                    $a = isset($a[0])?$a[0]:null;
+                    if ($a!==null) {
+                        $msg = "";
+                        foreach ($a as $key => $value) {
+                            $key = str_replace("_"," ",$key);
+                            $msg.= ucwords($key)." : ".$value.PHP_EOL;
+                        }
+                    } else {
+                        $msg = "Not Found !";
+                    }
+                    break;
                 case 'q_anime':
                     $a = new MyAnimeList("ammarfaizi2", "triosemut123");
                     $a = (array)$a->search($this->_msg)->entry;
