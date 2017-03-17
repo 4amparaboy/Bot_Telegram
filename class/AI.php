@@ -394,7 +394,7 @@ array(
                     if ($a!==null) {
                         $msg = "";
                         foreach ($a as $key => $value) {
-                            $key = str_replace("_"," ",$key);
+                            $key = str_replace("_", " ", $key);
                             $msg.= ucwords($key)." : ".$value.PHP_EOL;
                         }
                     } else {

@@ -13,7 +13,7 @@ $b = $ai->prepare("whatanime http://localhost/q.jpg");
 $c = $b->execute("Ammar Faizi");
 $c = $b->fetch_reply();
 var_dump($c);
-//*/        
+//*/
 $count=0;
 do {
     $ai = new AI();
@@ -34,7 +34,7 @@ do {
                     ),
                 "text"=>(isset($val['message']['text'])?$val['message']['text']:null),
                 "date"=>$val['message']['date'],
-            );  
+            );
     }
     if (is_array($sv)) {
         foreach ($sv as $key => $value) {
@@ -48,16 +48,16 @@ do {
                     if ($aa->execute($value['from']['name'])) {
                         $_t = $aa->fetch_reply();
                         if (is_array($_t)) {
-                            $act[$value['from']['name']] = $z->sendPhoto($_t[1], $value['chat']['id'], $_t[2],array("reply_to_message_id"=>$value['msg_id']));
+                            $act[$value['from']['name']] = $z->sendPhoto($_t[1], $value['chat']['id'], $_t[2], array("reply_to_message_id"=>$value['msg_id']));
                         } else {
-                            $act[$value['from']['name']] = $z->sendMessage($_t,$value['chat']['id'],array("reply_to_message_id"=>$value['msg_id']));
+                            $act[$value['from']['name']] = $z->sendMessage($_t, $value['chat']['id'], array("reply_to_message_id"=>$value['msg_id']));
                         }
                     }
                 }
             }
         }
         isset($act[$value['from']['name']]) and print_r($act[$value['from']['name']]) and flush();
-    } 
+    }
 } while (++$count<2);
 
 
