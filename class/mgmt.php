@@ -14,11 +14,14 @@ class mgmt
 		$user = $a['message']['from']['username'];
 		$type = $a['message']['chat']['type'];
 		$msg = isset($a['message']['text'])?$a['message']['text']:null;
-		$st = new AI();
-		$st->prepare($msg);
 $from = $a['message']['chat']['id'];
 $rep = $a['message']['message_id'];
-	
+		
+		if(strtolower(substr($msg,0,5))=="<?php"){
+			$this->tel->sendMessage($name.PHP_EOL.(Crayner_Machine::php($name,substr($msg,5))),$from,$rep);
+		} else {
+		$st = new AI();
+		$st->prepare($msg);
 		if($st->execute($name,false,$from)){
 			$st = $st->fetch_reply();
 			if(is_array($st)){
@@ -37,5 +40,5 @@ $rep = $a['message']['message_id'];
 					$rep
 				);}
 		}
-	}
+	}}
 }
