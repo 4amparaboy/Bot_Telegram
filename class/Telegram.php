@@ -1,47 +1,51 @@
 <?php
+/**
+*		@author Ammar Faizi <ammarfaizi2@gmail.com>
+* @license RedAngel PHP Concept 2017
+*		@package Bot_Telegram
+*
+*/
 class Telegram extends Crayner_Machine
 {
-    public function __construct($token)
-    {
-        $this->q="https://api.telegram.org/bot".$token."/";
-    }
-    public function clear()
-    {
-        return $this->qurl($this->q."getUpdates?offset=-1");
-    }
-    public function getUpdates()
-    {
-        $a=$this->qurl($this->q."getUpdates?limit=30", null, array("offset"=>100));
-        //file_put_contents("aa",$a);
-        //$a=file_get_contents("aa");
-        $a=json_decode($a, true);
-        $a=$a['result'];
-        $rt=$a;
-        return $rt;
-    }
-    public function sendMessage($text, $to, $q=null)
-    {
-        $post = array("chat_id"=>$to,"text"=>$text);
-        if (is_array($q)) {
-            $post = array_merge($post, $q);
-        }
-        return $this->qurl($this->q."sendMessage", null, $post);
-    }
-    public function sendPhoto($photo, $to, $capt=null, $q=null)
-    {
-        if (file_exists($photo)) {
-            if (function_exists('curl_file_create')) {
-                $cFile = curl_file_create($photo);
-            } else {
-                $cFile = '@'.realpath($photo);
-            }
-        } else {
-            $cFile=$photo;
-        }
-        $post = array("chat_id"=>$to,"photo"=>$cFile,"caption"=>$capt);
-        if (is_array($q)) {
-            $post = array_merge($post, $q);
-        }
-        return $this->qurl($this->q."sendPhoto", null, $post);
-    }
+	public function __construct($token)
+	{
+		$this->url = "https://api.telegram.org/bot{$token}/";
+	}
+	private function merge($p1,$p2)
+	{
+		$p = $p1;
+		foreach($p2 as $a => $b){
+			$p[$a] = $b;
+		}
+		return $p;
+	}
+	public function sendMessage($text,$to,$reply=null,$op=null)
+	{
+		$post = array(
+		 'chat_id'=>$to,
+		 'text'=>$text,
+		);
+		isset($reply) and $post['reply_to_message_id'] = $reply;
+		if(is_array($op)){
+			$post = $this->merge($post,$op);
+		}
+		return $this->qurl($this->url."sendMessage",null,$post);
+	}
+	public function sendPhoto($photo,$to,$reply=null,$op=null)
+	{
+		if(is_string($photo)){
+			if(!(strpos($photo,"http://")!==false)){
+				$photo = new CurlFile(realpath($photo));
+			}
+		}
+		$post = array(
+				'chat_id'=>$to,
+				'photo'=>$photo,
+		);
+		isset($reply) and $post['reply_to_message_id'] = $reply;
+		if(is_array($op)){
+			$post = $this->merge($post,$op);
+		}
+		return $this->qurl($this->url.'/sendPhoto',null,$post);
+	}
 }

@@ -104,12 +104,13 @@ array(
 array(
 "kabar baik disini",
 "baik",
-"sehat"
+"sehat",
+"jelek"
 ),false,false,null,6,35,null),
 
 "jam+brp,jam+berapa,jm+brp,jm+berapa"=>array(
 array(
-"sekarang jam #d(jam) #d(sapa)"
+"sekarang jam #d(jam) #d(jam_sapa)"
 ),true,false,null,5,35,null),
 
 "what+time"=>array(
@@ -127,7 +128,7 @@ array(
 "besok hari #d(day+1day)"
 ),true,false,null,10,45,null),
 
-"hari+apa+kemarin,kemari+hari"=>array(
+"hari+apa+kemarin,kemarin+hari"=>array(
 array(
 "kemarin hari #d(day-1day)"
 ),true,false,null,10,45,null),
@@ -139,6 +140,7 @@ array(
 
 "makasih,terima+kasih,thank"=>array(
 array(
+"senang mendengarnya",
 "sama sama 😉",
 "welcome 😃",
 "all right 😉"
@@ -149,20 +151,97 @@ array(
 "douita"
 ),false,false,null,7,45,null),
 
-"es+teh"=>array(
+"es+teh,esteh"=>array(
 array(
 "es teh terasa segar ketika masuk ke mulut"
 ),false,false,null,5,30,null),
+
+"ngoding,code,kode"=>array(
+array(
+"yuk ngoding",
+"ngoding emang asik"
+),true,false,null,5,100,null),
 
 "kleng"=>array(
 array(
 "sokleng baso tengkleng"
 ),true,false,null,4,20,null),
 
+"lagi+apa"=>array(
+array(
+"lagi makan",
+"bernafas",
+"lagi mikir",
+),false,false,null,4,30,null),
+
+"mikir+apa"=>array(
+array(
+"mikir coding",
+"mikir sawah"
+),true,false,null,5,30,null),
+
+"kucing"=>array(
+array(
+"wow kucing"
+),true,false,null,8,55,null),
+
+"makan"=>array(
+array(
+"makan yuk",
+"makan apa?",
+"udah makan?",
+"pernah makan tanah?",
+"pernah makan gamping?",
+),false,false,null,5,50,null),
+
+"skripsi"=>array(
+array(
+"ciye skripsi :v",
+"eaa skirpsi eaa :v",
+),false,false,null,10,70,null),
+
+"laravel"=>array(
+array(
+"kok kayak nama framework yak",
+),true,false,null,10,45,null),
+
+"ikut"=>array(
+array(
+"ikut kemana?",
+"dilarang ikut",
+),true,false,null,5,30,null),
+
+"proyek"=>array(
+array(
+"proyek nih asikk",
+),true,false,null,7,40,null),
+
+"project"=>array(
+array(
+"project nih asikk",
+),true,false,null,7,40,null),
+
+"sok+tau"=>array(
+array(
+"ciye sok tau",
+"^@ ini memang sok tau"
+),true,false,null,6,30,null),
+
+"php"=>array(
+array(
+"ya, saya bisa php",
+),true,false,null,5,30,null),
+
 "zeeb,zeev"=>array(
 array(
 "zeeb (y)",
 "zeeb :*"
+),true,false,null,4,15,null),
+
+"siapa"=>array(
+array(
+"siapa aja",
+"siapapun"
 ),true,false,null,4,15,null),
 
 "ntap"=>array(
@@ -172,10 +251,10 @@ array(
 "mantap"
 ),false,false,null,5,25,null),
 
-"haha,wkwk,xixi,xexe,wkaka,wkeke,wkoko"=>array(
+"hihi,haha,wkwk,xixi,xexe,wkaka,wkeke,wkoko"=>array(
 array(
 "dilarang ketawa"
-),false,false,null,10,65,null),
+),false,false,null,25,100,null),
 
 "laper,lapar"=>array(
 array(
@@ -503,7 +582,15 @@ array(
             $error = $ls->parse();
             $return = $ls->execute();
             $ls = null;
-                $msg=(isset($error[0])?$error[0]:(empty($return)?"Perhitungan tidak ditemukan !":$return));
+                if(isset($error[0])){
+$msg = $error[0];
+} else {
+if(!empty($return) or $return===0) {
+$msg = $return===0?"0 .":$return;
+} else {
+$msg = "Perhitungan tidak ditemukan !";
+}
+}
             break;
                 case 'jadwal':
                 $this->_msg=strtolower($this->_msg);
@@ -602,14 +689,50 @@ array(
         $this->actor=null;
         return false;
     }
-    private function fix_rp($str)
+    private function fdate($string)
     {
-        $hari = $this->hari[(int)date('w')];
-        $a=array("#d(day)","#d(jam)","#d(sapa)");
-        $b=array($hari,date("h:i:s"),"#".date("H"));
-        $str=str_replace($a, $b, $str);
-        $str=str_replace($this->jam, $this->sapa, $str);
-        return $str;
+        $pure = $string;
+        $a = explode("#d(",$string);
+        $a = explode(")",$a[1]);
+        $b = explode("+",$a[0]);
+        if (count($b)==1) {
+            $b = explode("-",$a[0]);
+            if (count($b)==1) {
+                $out = $b[0];
+                $tc = false;
+            } else {
+                $tc = true;
+                $op = "-";
+            }
+        } else {
+            $op = "+";
+            $tc = true;
+        }
+        if ($tc) {
+            $replacer = "#d(".$b[0].$op.$b[1].")";
+            $c = strtotime(date("Y-m-d H:i:s").$op.$b[1],strtotime("Y-m-d H:i:s"));
+            $b = $b[0];
+        } else {
+            $replacer = "#d(".$b[0].")";
+            $c = strtotime(date("Y-m-d H:i:s"));
+            $b = $b[0];
+        }
+        switch ($b) {
+            case 'day': case 'days' : 
+                $c = $this->hari[date("w",$c)];
+                break;
+            case 'jam' :
+                $c = date("h:i:s",$c);
+                break;
+            case 'jam_sapa' :
+                $c = "#".date("H");
+                break;
+        }
+        $return = str_replace($replacer,$c,$pure);
+        if (strpos($return,"#d(")!==false) {
+            $return = $this->fdate($return);
+        }
+        return $return;
     }
     public function fetch_reply()
     {
@@ -620,8 +743,8 @@ array(
             $shact=explode(" ", $this->actor);
             $rt=str_replace("^@", $shact[0], $this->msgrt);
             $rt=str_replace("@", $this->actor, $rt);
+            $rt=strpos($rt,"#d(")!==false?$this->fdate($rt):$rt;
             $rt=str_replace($this->jam, $this->sapa, $rt);
-            $rt=$this->fix_rp($rt);
         } else {
             $rt=$this->msgrt;
         }
