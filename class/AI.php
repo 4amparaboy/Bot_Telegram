@@ -722,10 +722,9 @@ foreach($sholat as $z){
                     $a = (array)$a->search($this->_msg)->entry;
                     if (!empty($a)) {
                         $file = data.DIRECTORY_SEPARATOR.md5($a['image']).".jpg";
-                        !file_exists($file) and file_put_contents($file,Crayner_Machine::curl($a['image']));
                         $msg = array(
                                 'img/text',
-                                $file,
+                                $a['image'],
                                 ""
                             );
                         foreach ($a as $key => $value) {
@@ -745,10 +744,9 @@ foreach($sholat as $z){
                     $a = (array)$a->search($this->_msg, "manga")->entry;
                     if (!empty($a)) {
                         $file = data.DIRECTORY_SEPARATOR.md5($a['image']).".jpg";
-                        !file_exists($file) and file_put_contents($file,Crayner_Machine::curl($a['image']));
                         $msg = array(
                                 'img/text',
-                                $file,
+                                $a['image'],
                                 ""
                             );
                         foreach ($a as $key => $value) {
@@ -876,7 +874,7 @@ if(isset($a['respSentence'])){
     	
     	
     }}
-    public function execute($actor="",$stoper=false,$gcn)
+    public function execute($actor="",$stoper=false,$gcn=null)
     {
 if(file_exists("writing")){
 	$aa = new Writer();

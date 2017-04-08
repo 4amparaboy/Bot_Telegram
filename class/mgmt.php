@@ -16,15 +16,25 @@ class mgmt
 		$msg = isset($a['message']['text'])?$a['message']['text']:null;
 		$st = new AI();
 		$st->prepare($msg);
-		echo $msg;
-		if($st->execute($name)){
-			echo 1;
+$from = $a['message']['chat']['id'];
+$rep = $a['message']['message_id'];
+	
+		if($st->execute($name,false,$from)){
 			$st = $st->fetch_reply();
+			if(is_array($st)){
+				$this->tel->sendPhoto($st[1],
+				$from,$rep
+				);
+				$this->tel->sendMessage(
+				$st[2],
+				$from
+				);
+			} else {
 		echo 	$this->tel->sendMessage(
 					$st,
-					$a['message']['chat']['id'],
-					$a['message']['message_id']
-			);
+					$from,
+					$rep
+				);}
 		}
 	}
 }

@@ -7,6 +7,7 @@ use Crayner_Machine;
 * @package AI
 * @subpackage Brainly
 */
+define("data","data");
 class Brainly extends Crayner_Machine{
 	public function execute($query,$limit=1){
 		$p=null;
