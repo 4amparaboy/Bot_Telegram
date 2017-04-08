@@ -1,27 +1,22 @@
 <?php 
 date_default_timezone_set("Asia/Jakarta");
 /**
-* @author Ammar F. https://www.facebook.com/ammarfaizi2 <ammarfaizi2@gmail.com>
+* @author Ammar F. <ammarfaizi2@gmail.com> https://www.facebook.com/ammarfaizi2
 * @license RedAngel_PHP_Concept (c) 2017
-* @package Artificial Intelegence
+* @package Artificial Inteligence
 */
-
-include('tools/JadwalSholat.php');
-include('tools/Whois/Whois.php');
-include('tools/MyAnimeList.php');
-include('tools/SaferScript.php');
-include('tools/Translator.php');
-include('tools/WhatAnime.php');
-include('tools/Brainly.php');
-include('tools/Saklar.php');
-include('tools/TV.php');
+function autoload($class){
+    include __DIR__.DIRECTORY_SEPARATOR.str_replace("\\",DIRECTORY_SEPARATOR,$class).".php";
+}
+spl_autoload_register('autoload');
+use tools\Google_Translate;
 use tools\JadwalSholat;
 use tools\Whois\Whois;
 use tools\MyAnimeList;
 use tools\SaferScript;
-use tools\Translator;
 use tools\WhatAnime;
 use tools\Brainly;
+use tools\Writer;
 use tools\Saklar;
 use tools\TV;
 
@@ -111,27 +106,27 @@ array(
 "jam+brp,jam+berapa,jm+brp,jm+berapa"=>array(
 array(
 "sekarang jam #d(jam) #d(jam_sapa)"
-),true,false,null,5,35,null),
+),true,false,null,15,45,null),
 
 "what+time"=>array(
 array(
 "time #d(jam)"
-),false,false,null,5,35,null),
+),false,false,null,8,35,null),
 
 "what+day"=>array(
 array(
 "today #d(day)"
-),false,false,null,5,35,null),
+),false,false,null,8,35,null),
 
 "hari+apa+besok,besok+hari"=>array(
 array(
 "besok hari #d(day+1day)"
-),true,false,null,10,45,null),
+),false,false,null,10,45,null),
 
 "hari+apa+kemarin,kemarin+hari"=>array(
 array(
 "kemarin hari #d(day-1day)"
-),true,false,null,10,45,null),
+),false,false,null,10,45,null),
 
 "hari+apa"=>array(
 array(
@@ -140,11 +135,10 @@ array(
 
 "makasih,terima+kasih,thank"=>array(
 array(
-"senang mendengarnya",
 "sama sama 😉",
 "welcome 😃",
-"all right 😉"
-),false,false,null,5,35,null),
+"senang mendengarnya 😉"
+),false,false,null,8,45,null),
 
 "arigato"=>array(
 array(
@@ -156,16 +150,43 @@ array(
 "es teh terasa segar ketika masuk ke mulut"
 ),false,false,null,5,30,null),
 
+"pernah+ngoding"=>array(
+array(
+"oh sering"
+),false,false,null,6,45,null),
+
+"levvat,lewat"=>array(
+array(
+"dilarang lewat",
+"mampir sekalian ga usah lewat"
+),true,false,null,4,15,null),
+
+"nyimak"=>array(
+array(
+"dilarang nyimak !"    
+),false,false,null,6,45,null),
+
+"ngoding+apaan,ngoding+apa"=>array(
+array(
+"coba tebak ngoding itu apa"
+),false,false,null,7,45,null),
+
 "ngoding,code,kode"=>array(
 array(
 "yuk ngoding",
-"ngoding emang asik"
-),true,false,null,5,100,null),
+"ngoding emang asik",
+"ngoding eaa",
+),true,false,null,25,100,null),
 
 "kleng"=>array(
 array(
 "sokleng baso tengkleng"
 ),true,false,null,4,20,null),
+
+"kucing"=>array(
+array(
+"wow kucing"
+),true,false,null,8,55,null),
 
 "lagi+apa"=>array(
 array(
@@ -180,10 +201,17 @@ array(
 "mikir sawah"
 ),true,false,null,5,30,null),
 
-"kucing"=>array(
+"makan+apa"=>array(
 array(
-"wow kucing"
-),true,false,null,8,55,null),
+"makan nasi",
+"makan tanah",
+"makan kamu",
+),false,false,null,5,50,null),
+
+"dilarang"=>array(
+array(
+"ih ngelarang larang",
+),true,false,null,5,25,null),
 
 "makan"=>array(
 array(
@@ -193,6 +221,12 @@ array(
 "pernah makan tanah?",
 "pernah makan gamping?",
 ),false,false,null,5,50,null),
+
+"oyasumi,oyasume"=>array(
+array(
+"oyasumi ^@",
+"oyasuminasai",
+),false,false,null,5,35,null),
 
 "skripsi"=>array(
 array(
@@ -253,7 +287,7 @@ array(
 
 "hihi,haha,wkwk,xixi,xexe,wkaka,wkeke,wkoko"=>array(
 array(
-"dilarang ketawa"
+"dilarang ketawa",
 ),false,false,null,25,100,null),
 
 "laper,lapar"=>array(
@@ -268,27 +302,33 @@ array(
 "kenapa ^@, laper tha?"
 ),true,false,null,2,4,null),
 
+"bot+kacang,bot+katjang"=>array(
+array(
+"nggk kacang kok, cuma nggk ngerti aja",
+"nggk kacang, cuma bingung mo ngomong apa",
+),false,false,null,6,25,null),
+
 "bot"=>array(
 array(
 "apa kang ^@?"
 ),true,false,null,2,10,null),
 
-
 );
         $this->jam = array('#01','#02','#03','#04','#05','#06','#07','#08','#09','#10','#11','#12','#13','#14','#15','#16','#17','#18','#19','#20','#21','#22','#23','#24','#00',);
         $this->sapa = array('dini hari','dini hari','dini hari','dini hari','pagi','pagi','pagi','pagi','pagi','menjelang siang','siang','siang','siang','siang','sore','sore','sore','sore','malam','malam','malam','malam','malam','dini hari','dini hari');
         $this->jadwal    = array(
-"Senin"        =>"Senin\n\nBiologi\nKewirausahaan\nMatematika\nMatematika\nKimia\nKimia\nFisika\n\nPulang jam 16.00",
-"Selasa"    =>"Selasa\n\nGeografi\nGeografi\nEkonomi\nEkonomi\nMatematika\nSeni Budaya\nAgama\nKeiran (Japan)\n\nPulang jam 16.30",
-"Rabu"        =>"Rabu\n\nB.Indonesia\nB.Indonesia\nB.Inggris\nB.Inggris\nBiologi\nBiologi\nAgama\nMatematika\nMatematika\n\nPulang jam 15.30",
-"Kamis"        =>"Kamis\n\nOlahraga\nOlahraga\nOlahraga\nGeografi\nB.Indonesia\nPKN\nFisika\nFisika\n\nPulang jam 15.30",
-"Jum'at"    =>"Jum'at\n\nSenam\nMatematika\nMatematika\nKimia\nSejarah\nSejarah\n\nPulang jam 11.00",
-"Sabtu"        =>"Sabtu\n\nPKN\nEkonomi\nB.Jawa\nPramuka(jarang)\nPramuka(jarang)\n\nPulang jam 11.00",
-"Minggu"    =>"Minggu\n\nNgisi kuliah kalsel\nNgisi kuliah Surabaya\nNgisi kuliah umum\nBebas"
+"Senin"  =>"Senin\n\nUpacara\nBiologi\nKewirausahaan\nMatematika\nMatematika\nKimia\nKimia\nFisika\n\nPulang jam 16.00",
+"Selasa" =>"Selasa\n\nGeografi\nGeografi\nEkonomi\nEkonomi\nMatematika\nSeni Budaya\nAgama\nKeiran (Japan)\n\nPulang jam 16.30",
+"Rabu"   =>"Rabu\n\nB.Indonesia\nB.Indonesia\nB.Inggris\nB.Inggris\nBiologi\nBiologi\nAgama\nMatematika\nMatematika\n\nPulang jam 15.30",
+"Kamis"  =>"Kamis\n\nOlahraga\nOlahraga\nOlahraga\nGeografi\nB.Indonesia\nPKN\nFisika\nFisika\n\nPulang jam 15.30",
+"Jum'at" =>"Jum'at\n\nSenam\nMatematika\nMatematika\nKimia\nSejarah\nSejarah\n\nPulang jam 11.00",
+"Sabtu"  =>"Sabtu\n\nPKN\nEkonomi\nB.Jawa\nPramuka(jarang)\nPramuka(jarang)\n\nPulang jam 11.00",
+"Minggu" =>"Minggu\n\nNgisi kuliah kalsel\nNgisi kuliah Surabaya\nNgisi kuliah umum\nBebas"
             );
-        $this->superuser = array("Ammar F");
+        $this->superuser = array("Ammar F","Ammar Faizi");
         $this->hari = array("Minggu","Senin","Selasa","Rabu","Kamis","Jum'at","Sabtu");
         $this->root_command = array(
+"@carik"=>1,
 "off"=>2,
 "on"=>2,
 "shexec"=>1,
@@ -303,12 +343,13 @@ array(
 "whois"=>1,
 "hitung"=>1,
 "jadwal"=>1,
-"jadwal_sholat"=>1,
 "lampu"=>2,
 "tv"=>3,
 "q_anime"=>1,
 "q_manga"=>1,
 "whatanime"=>1,
+"sm1"=>1,
+"sm0"=>1
 );
     }
     private function ttreturn($key)
@@ -328,7 +369,6 @@ array(
                             $tr[]=(int)$b[0];
                         }
                     }
-                    var_dump($tr);
                     if (in_array(date("H", $this->gtime), $tr)) {
                         return $vl[array_rand($vl)];
                         break;
@@ -416,56 +456,133 @@ array(
         }
         return $trreply===true?$this->ttreturn($needle):$this->wordlist[$needle][0][array_rand($this->wordlist[$needle][0])];
     }
-    public function prepare($string)
+    public function prepare($string,$gcn=null)
     {
+$this->gc = $gcn;    	
         $this->msg=strtolower($string);
         $this->_msg=$string;
         return $this;
     }
-    public function spwcmd($string, $actor=null)
+    public function spwcmd($string, $actor = null)
     {
-        $a=explode(" ", $this->_msg, 2);
-        $this->_msg=$a[1];
-        if (isset($this->root_command[$string])&&in_array($actor, $this->superuser)) {
-            $a=null;
+        $a          = explode(" ", $this->_msg, 2);
+        $this->_msg = isset($a[1])?$a[1]:null;
+        if (isset($this->root_command[$string]) && in_array($actor, $this->superuser)) {
+            $a = null;
             switch ($string) {
-                case "on":
-                 $cf = file_exists("bot_off");
-                    $msg=($cf?"bot_on":"~");
-                 if ($cf) {
-                     unlink("bot_off");
-                     $msg=file_exists("bot_off")?"error":$msg;
-                 }
-                break;
-                case "off":
-                    $cf = file_exists("bot_off");
-                    $msg=($cf?"~":"bot_off");
+case '@carik':
+if(!file_exists("rwt")){
+$a = array(
+	"topik","judul","materi"
+);
+foreach($a as $a){
+	if(strpos(strtolower($this->_msg),$a)!==false){
+		$b = explode('"',$this->_msg);
+		$c = '"';
+		if(count($b)<2){
+			$b = explode("'",$this->_msg);
+			$c = "'";
+		}
+		$d = explode($c,$b[1]);
+		$d = $d[0];
+		$c = explode("oleh",strtolower($this->_msg),2);
+		print_r($c);
+		if(count($c)==2){
+			$name = ucwords(end($c));
+		} else {
+			$name = null;
+		}
+		$pp = new Writer();
+		$pp->__new($name,$d,$this->gc);
+		$count = file_exists("c_materi")?(int)file_get_contents("c_materi"):0;
+		$pp->save("materi_".(++$count).".json");
+		$msg = "oke, siap mencatat materi ".$d." oleh".$name.". Ini notulen ke ".($count);
+		file_put_contents("c_materi",$count);
+		file_put_contents("rwt","1");
+		break;
+	}
+}
+}
+if(!isset($msg) and strpos(strtolower($this->_msg),"mulai")!==false){
+$a = array(
+	"nyatet","nyatat","mencatat"
+);
+foreach($a as $a){
+	if(strpos(strtolower($this->_msg),$a)!==false){
+		if(file_exists("rwt")){
+		file_put_contents("writing","1");
+		$msg = "siap...";
+		break;
+	} else {
+		$msg = "saya tidak bisa mencatat, topik yang dicatat belum ditentukan !";
+		break;
+	}
+	}
+}
+}
+if(!isset($msg) and strpos(strtolower($this->_msg),"henti")!==false){
+	
+	$a = array(
+	"nyatet","nyatat","mencatat","catatan"
+);
+foreach($a as $a){
+	if(strpos(strtolower($this->_msg),$a)!==false){
+		if(file_exists("rwt")){
+		unlink("writing");
+		unlink("rwt");
+		$msg = "siap, catatan dihentikan";
+		break;
+	} else {
+		$msg = "saya belum mulai mencatat kok";
+		break;
+	}
+}
+}}
+if(!isset($msg) and strpos(strtolower($this->_msg),"kirim")!==false){
+$msg = "sedang mengirim...\n\n\n...\n\nterkirim 	";
+}
+
+break;            	
+            	
+            	
+                case "on": case "bot_on" :
+                    $cf  = file_exists("bot_off");
+                    $msg = ($cf ? "ok makasih sdh boleh ngomong" : "~");
+                    if ($cf) {
+                        unlink("bot_off");
+                        $msg = file_exists("bot_off") ? "error" : $msg;
+                    }
+                    break;
+                case "off": case "bot_off" :
+                    $cf  = file_exists("bot_off");
+                    $msg = ($cf ? "~" : "ok, nyimak doang");
                     !$cf and file_put_contents("bot_off", "");
                     break;
-                    case "shexec":
-                        $msg=shell_exec($this->_msg);
-                        $msg=empty($msg)?"~":$msg;
+                case "shexec":
+                    $msg = shell_exec($this->_msg);
+                    $msg = empty($msg) ? "~" : $msg;
                     break;
-                    case "shell_exec":
-                        $msg=shell_exec($this->_msg);
-                        $msg=empty($msg)?"~":$msg;
+                case "shell_exec":
+                    $msg = shell_exec($this->_msg);
+                    $msg = empty($msg) ? "~" : $msg;
                     break;
-                    case "eval":
+                case "eval":
                     $ls = new SaferScript($this->_msg);
                     $ls->allowHarmlessCalls();
-                    $error = $ls->parse(true);
-                $return = $ls->execute();
-                $ls = null;
-                    $msg=(isset($error[0])?$error[0]:(empty($return)?"success !":$return));
+                    $error  = $ls->parse(true);
+                    $return = $ls->execute();
+                    $ls     = null;
+                    $msg    = (isset($error[0]) ? $error[0] : (empty($return) ? "success !" : $return));
                     break;
-                    default:
-                        $msg=false;
+                default:
+                    $msg = false;
                     break;
             }
         } elseif (isset($this->root_command[$string])) {
-            $msg = "Permission Dennied : ".$actor;
+            $msg = "";
         } elseif (isset($this->command[$string])) {
             switch ($string) {
+                /*                                                                                  */
                 case 'whatanime':
                     $a = new WhatAnime($this->_msg);
                     $a = $a->fetch_info();
@@ -480,148 +597,243 @@ array(
                         $msg = "Not Found !";
                     }
                     break;
-                case 'q_anime':
-                    $a = new MyAnimeList("ammarfaizi2", "triosemut123");
-                    $a = (array)$a->search($this->_msg)->entry;
-                    if (!empty($a)) {
-                        $msg = array(
-                                'img/text',
-                                $a['image'],
-                                ""
-                            );
-                        foreach ($a as $key => $value) {
-                            $key!="image" and $msg[2].=ucfirst($key)." : \"".html_entity_decode($value, ENT_QUOTES, 'UTF-8')."\"".PHP_EOL;
-                        }
-                    } else {
-                        $msg = "Mohon maaf \"{$this->_msg}\" tidak ditemukan !";
-                    }
-                    break;
-                case 'q_manga':
-                    $a = new MyAnimeList("ammarfaizi2", "triosemut123");
-                    $a = (array)$a->search($this->_msg, "manga")->entry;
-                    if (!empty($a)) {
-                        $msg = array(
-                                'img/text',
-                                $a['image'],
-                                ""
-                            );
-                        foreach ($a as $key => $value) {
-                            $key!="image" and $msg[2].=ucfirst($key)." : \"".html_entity_decode($value, ENT_QUOTES, 'UTF-8')."\"".PHP_EOL;
-                        }
-                    } else {
-                        $msg = "Mohon maaf \"{$this->_msg}\" tidak ditemukan !";
-                    }
-                    break;
+                /*                                                                                  */
+
+
+                
+                /*                                                                                  */
+                case 'sm1':
+         file_put_contents("sm","");
+         		$msg = 1;
+         break;
+         case 'sm0':
+         file_exists("sm") and $a=(int)unlink("sm");
+       $msg=isset($a)?$a:0;
+       break;
                 case 'ask':
-                    $ask=function ($query) {
-                        $a = new Brainly();
-                        $b = $a->execute($query, 100);
-                        $a = null;
+                    $ask = function ($query) {
+                        $a     = new Brainly();
+                        $b     = $a->execute($query, 100);
+                        $a     = null;
                         $query = explode(" ", $query);
-                        $ctn = 0;
+                        $ctn   = 0;
                         foreach ($b['result'] as $val) {
                             $bb[$ctn] = 0;
                             foreach ($query as $val2) {
-                                if (strpos($val[0], $val2)!==false) {
+                                if (strpos($val[0], $val2) !== false) {
                                     ++$bb[$ctn];
                                 }
                             }
                             ++$ctn;
                         }
-                        return(($b['result'][array_search(max($bb), $bb)]));
+                        return (($b['result'][array_search(max($bb), $bb)]));
                     };
-                    $a = $ask($this->_msg);
-            if (empty($a[0])||empty($a[1])) {
-                $a = "Mohon maaf, saya tidak bisa menjawab pertanyaan \"".$action."\"";
-            } else {
-                $a = "Hasil pencarian dari pertanyaan ^@\n\nPertanyaan yang mirip :\n".$a[0]."\n\nJawaban :\n".$a[1]."\n\n\n";
-            }
-            $actor=explode(" ", $actor);
-            $a = str_replace("^@", $actor[0], $a);
-            $a = str_replace("@", implode(" ", $actor), $a);
-            $a = str_replace($this->jam, $this->sapa, $a);
-            $a = str_replace("<br />", PHP_EOL, $a);
-            $a =html_entity_decode(strip_tags($a), ENT_QUOTES, 'UTF-8');
-            $msg=$a;
-                break;
-                case 'translate':
-                    $translator = new Translator();
-                    $jsonMsg    = $translator->translate($this->_msg);
-                    if ($jsonMsg->code == 200) {
-                        $msg = $jsonMsg->text[0];
+                    $a   = $ask($this->_msg);
+                    if (empty($a[0]) || empty($a[1])) {
+                        $a = "Mohon maaf, saya tidak bisa menjawab pertanyaan \"" . $this->_msg . "\"";
                     } else {
-                        $msg = "({$jsonMsg->code}) Terjadi kesalahan pada server";
+                        $a = "Hasil pencarian dari pertanyaan ^@\n\nPertanyaan yang mirip :\n" . $a[0] . "\n\nJawaban :\n" . $a[1] . "\n\n\n";
                     }
+                    $actor = explode(" ", $actor);
+                    $a     = str_replace("^@", $actor[0], $a);
+                    $a     = str_replace("@", implode(" ", $actor), $a);
+                    $a     = str_replace($this->jam, $this->sapa, $a);
+                    $a     = str_replace("<br />", PHP_EOL, $a);
+                    $a     = html_entity_decode(strip_tags($a), ENT_QUOTES, 'UTF-8');
+                    $msg   = $a;
                     break;
+                /*                                                                                  */
+
+
+
+                /*                                                                                  */
+                case 'translate':
+$t = new Google_Translate();
+$msg = $t->translate($this->_msg);
+                    
+                    break;
+                /*                                                                                  */
+
+
+
+                /*                                                                                  */
                 case 'ctranslate':
                     $param = explode(" ", $this->_msg);
                     if (strlen($param[0]) == 2 || strlen($param[1]) == 2) {
                         $par = $param[0] . "," . $param[1];
                         unset($param[0], $param[1]);
-                        $translator = new Translator();
-                        $jsonMsg = $translator->translate(implode(" ", $param), $par);
-                        if ($jsonMsg->code == 200) {
-                            $msg = $jsonMsg->text[0];
-                        } else {
-                            $msg = "({$jsonMsg->code}) Terjadi kesalahan pada server";
-                        }
+                        $translator = new Google_Translate();
+                        $msg = $translator->translate(implode(" ", $param), $par);
                     } else {
                         $msg = "Mohon maaf, penulisan parameter custom translate salah.\n\nPenulisan yang benar :\nctranslate [from] [to] [string]\n\nContoh:\nctranslate en id 'how are you?'";
                     }
                     break;
-        case 'jadwal_sholat':
-                    $b=explode(" ", $this->_msg);
-                    $a=new JadwalSholat();
-                    $a=$a->get_jadwal($b[0]);
-                    $msg=$a===false?"Mohon maaf, jadwal sholat ".$b[0]." tidak ditemukan !":$a;
-                    break;
+                /*                                                                                  */
+
+
+
+                /*                                                                                  */
                 case 'hitung':
-                $a=array("x");$b=array("*");
-                $ls = new SaferScript('$q = '.str_replace($a, $b, $this->_msg).';');
-            $ls->allowHarmlessCalls('hitung');
-            $error = $ls->parse();
-            $return = $ls->execute();
-            $ls = null;
-                if(isset($error[0])){
-$msg = $error[0];
-} else {
-if(!empty($return) or $return===0) {
-$msg = $return===0?"0 .":$return;
-} else {
-$msg = "Perhitungan tidak ditemukan !";
-}
-}
-            break;
+                    $a  = array(
+                        "x"
+                    );
+                    $b  = array(
+                        "*"
+                    );
+                    $ls = new SaferScript('$q = ' . str_replace($a, $b, $this->_msg) . ';');
+                    $ls->allowHarmlessCalls('hitung');
+                    $error  = $ls->parse();
+                    $return = $ls->execute();
+                    $ls     = null;
+                    $msg    = (isset($error[0]) ? $error[0] : (empty($return) ? "Perhitungan tidak ditemukan !" : $return));
+                    break;
+                /*                                                                                  */
+
+
+
+                /*                                                                                  */
                 case 'jadwal':
-                $this->_msg=strtolower($this->_msg);
-                foreach ($this->jadwal as $z => $g) {
-                    $z=strtolower($z);
-                    if (strpos($this->_msg, $z)!==false) {
-                        $msg="Jadwal Hari ".$g;
-                        break;
-                    }
-                }
-                break;
-                case 'saklar':
-                    $b=explode(" ", $this->_msg);
-                    if (preg_match("#[^0-4\,]#", $b[0]) or !in_array($b[1], array("on","off"))) {
-                        $msg="Mohon maaf kang, penulisan perintah saklar salah\n\saklar [int] [on/off]";
+                    $this->_msg = strtolower($this->_msg);
+$sholat = array("shalat","sholat","solat","salat");
+foreach($sholat as $z){
+	if(strpos($this->_msg,$z)!==false){
+		$b=explode(" ", $this->_msg);
+                    $a=new JadwalSholat();
+                    $a=$a->get_jadwal($b[1]);
+                    $msg=$a===false?"Mohon maaf, jadwal sholat ".$b[1]." tidak ditemukan !":$a;
+                    break;
+	}
+}          if(!isset($msg)){
+                    foreach ($this->jadwal as $z => $g) {
+                        $z = strtolower($z);
+                        if (strpos($this->_msg, $z) !== false) {
+                            $msg = "Jadwal Hari " . $g;
+                            break;
+                        }
+                    }}
+                    break;
+                /*                                                                                  */
+
+
+
+                /*                                                                                  */
+                case 'q_anime':
+                    $a = new MyAnimeList("ammarfaizi2", "triosemut123");
+                    $a = (array)$a->search($this->_msg)->entry;
+                    if (!empty($a)) {
+                        $file = data.DIRECTORY_SEPARATOR.md5($a['image']).".jpg";
+                        !file_exists($file) and file_put_contents($file,Crayner_Machine::curl($a['image']));
+                        $msg = array(
+                                'img/text',
+                                $file,
+                                ""
+                            );
+                        foreach ($a as $key => $value) {
+                            $key!="image" and $msg[2].=ucwords(str_replace("_"," ",$key))." : \"".str_replace("<br />",PHP_EOL,html_entity_decode($value, ENT_QUOTES, 'UTF-8'))."\"".PHP_EOL;
+                        }
                     } else {
-                        $b[1]=str_ireplace(array("on","off"), array(0,1), $b[1]);
-                        $a=new saklar();
+                        $msg = "Mohon maaf \"{$this->_msg}\" tidak ditemukan !";
+                    }
+                    break;
+                /*                                                                                  */
+
+
+
+                /*                                                                                  */
+                case 'q_manga':
+                    $a = new MyAnimeList("ammarfaizi2", "triosemut123");
+                    $a = (array)$a->search($this->_msg, "manga")->entry;
+                    if (!empty($a)) {
+                        $file = data.DIRECTORY_SEPARATOR.md5($a['image']).".jpg";
+                        !file_exists($file) and file_put_contents($file,Crayner_Machine::curl($a['image']));
+                        $msg = array(
+                                'img/text',
+                                $file,
+                                ""
+                            );
+                        foreach ($a as $key => $value) {
+                            $key!="image" and $msg[2].=ucfirst($key)." : \"".html_entity_decode($value, ENT_QUOTES, 'UTF-8')."\"".PHP_EOL;
+                        }
+                    } else {
+                        $msg = "Mohon maaf \"{$this->_msg}\" tidak ditemukan !";
+                    }
+                    break;
+                /*                                                                                  */
+
+
+
+                /*                                                                                  */
+                case 'saklar':
+                    $b = explode(" ", $this->_msg);
+                    if (preg_match("#[^0-4\,]#", $b[0]) or !in_array($b[1], array(
+                        "on",
+                        "off"
+                    ))) {
+                        $msg = "Mohon maaf kang, penulisan perintah saklar salah\nsaklar [int] [on/off]";
+                    } else {
+                        $b[1] = str_ireplace(array(
+                            "on",
+                            "off"
+                        ), array(
+                            0,
+                            1
+                        ), $b[1]);
+                        $a    = new saklar();
                         $a->saklar($b[0], $b[1]);
-                        #$a->get_image();
-                    $msg=array('img','http://saklar.kangarie.com/nodemcu.php?webcam=1&rand='.md5(date("h:i:s a dmy")),"siap kang !\n".$a->get_status());
+                        $a->get_image();
+                        $msg = array(
+                            'img',
+                            __DIR__.'/../lampu.jpg',
+                            "siap kang !\n" . $a->get_status()
+                        );
                     }
                     break;
-                    case 'lampu':
-                    if ($this->_msg=="status") {
-                        $a=new saklar();
-                        #$a->get_image();
-                    $msg=array('img','http://saklar.kangarie.com/nodemcu.php?webcam=1&rand='.md5(date("h:i:s a dmy")),"status saat ini : \n".$a->get_status());
+                /*                                                                                  */
+
+
+
+                /*                                                                                  */
+                case 'lampu':
+                    if ($this->_msg == "status") {
+                        $a = new saklar();
+                        $a->get_image();
+                        $msg = array(
+                            'img',
+                            __DIR__.'/../lampu.jpg',
+                            $a->get_status()
+                        );
                     }
                     break;
-                    case 'tv':
+                /*                                                                                  */
+
+
+
+                /*                                                                                  */
+                case 'whois':
+                    $domain = new Whois($this->_msg);
+                    if ($domain->isAvailable()) {
+                        $sd = "Domain is available".PHP_EOL;
+                    } else {
+                        $sd = "Domain is registered".PHP_EOL;
+                    }
+                    $c = "";
+                    $get = array("Domain Name:","Registrar URL:","Updated Date:","Creation Date:","Registrar Registration Expiration Date:","Registrar:","Registrant Name:","Registrant Organization:","Registrant Street:","Registrant State/Province:","Registrant Phone:","Name Server:");
+                    foreach (explode("\n", str_replace(".", " . ", $domain->info())) as $val) {
+                        foreach ($get as $val2) {
+                            if (strpos($val, $val2)!==false) {
+                                $c .= $val.PHP_EOL;
+                                break;
+                            }
+                        }
+                    }
+                   $msg=(empty($c)?$this->_msg." not found in database !":$c.PHP_EOL.PHP_EOL.$sd);
+                    break;
+                /*                                                                                  */
+
+
+
+                /*                                                                                  */
+                case 'tv':
                     $b=explode(" ", $this->_msg);
                     $b=strtolower($b[0]);
                     if (!in_array($b, array("on","off","status"))) {
@@ -636,13 +848,45 @@ $msg = "Perhitungan tidak ditemukan !";
                             var_dump($a);
                             $msg=array("img",$a[1],($a[0]?"siap kang, tv di".$b." kan sekarang (y)":"mohon maaf kang, tvnya sudah ".$b));
                         }
-                    }break;
                     }
+                    break;
+                /*                                                                                  */
+            }
         }
-        return isset($msg)?$msg:false;
+        return isset($msg) ? $msg : false;
     }
-    public function execute($actor="")
+private function sm($actor){
+$a = json_decode(Crayner_Machine::curl("http://yessrilanka.com/simisimi.php?msg=".urlencode($this->msg)),true);
+file_put_contents("a.txt",json_encode($a));
+if(isset($a['respSentence'])){
+	if(strpos($a['respSentence'],"Saya belum paham")!==false){
+	 $this->absmsg=false;
+  $this->msg=null;
+  $this->msgrt=null;
+  $this->actor=null;
+    return false;
+	} else {
+		$x = array("simi");
+		$b = array("carik");
+		$this->msg=null;
+  $this->msgrt=str_ireplace($x,$b,urldecode($a['respSentence']));
+  $this->actor=$actor;$this->absmsg=false;
+		return true;
+	}   	
+    	
+    	
+    }}
+    public function execute($actor="",$stoper=false,$gcn)
     {
+if(file_exists("writing")){
+	$aa = new Writer();
+	$cc = (int)file_get_contents("c_materi");
+	$cc = "materi_".$cc.".json";
+	if($aa->open($cc,$this->gc)){
+	$aa->write($actor,$this->msg,$this->gc);
+	$aa->save($cc);}
+}
+    	if($stoper===true){return false;}
         $opmsg=explode(" ", $this->msg);
         $opmsg=strtolower($opmsg[0]);
         foreach ($this->root_command as $q => $val) {
@@ -656,23 +900,22 @@ $msg = "Perhitungan tidak ditemukan !";
             }
         }
         foreach ($this->command as $q => $z) {
-            if ($opmsg==$q) {
-                $this->absmsg=true;
-                $this->msg=null;
-                $this->msgrt=$this->spwcmd($q, $actor);
-                $this->actor=$actor;
-                    
-                return true;
-                break;
-            }
-        }
-        if (file_exists("bot_off")) {
-            $this->absmsg=false;
-            $this->msg=null;
-            $this->msgrt=null;
-            $this->actor=null;
-            return false;
-        }
+if ($opmsg==$q) {
+$this->absmsg=true;
+$this->msg=null;
+$this->msgrt=$this->spwcmd($q, $actor);
+$this->actor=$actor;                   
+return true;
+break;
+}
+}
+if (file_exists("bot_off")) {
+$this->absmsg=false;
+$this->msg=null;
+$this->msgrt=null;
+$this->actor=null;
+return false;
+}
         foreach ($this->wordlist as $key => $val) {
             if ($r=$this->word_check($key, $this->msg, (isset($val[1])?$val[1]:false), (isset($val[2])?$val[2]:false), (isset($val[3])?$val[3]:null), (isset($val[4])?$val[4]:null), (isset($val[5])?$val[5]:null))) {
                 $this->absmsg=false;
@@ -683,6 +926,9 @@ $msg = "Perhitungan tidak ditemukan !";
                 break;
             }
         }
+if(file_exists("sm")){
+return $this->sm($actor);
+}
         $this->absmsg=false;
         $this->msg=null;
         $this->msgrt=null;

@@ -10,7 +10,7 @@ class mgmt
 	public function run()
 	{
 		$a = $this->data;
-		$name = $a['message']['from']['first_name'].(isset($a['message']['from']['last_name'])?' '.$a['message']['from']['first_name']:'');
+		$name = $a['message']['from']['first_name'].(isset($a['message']['from']['last_name'])?' '.$a['message']['from']['last_name']:'');
 		$user = $a['message']['from']['username'];
 		$type = $a['message']['chat']['type'];
 		$msg = isset($a['message']['text'])?$a['message']['text']:null;
