@@ -34,7 +34,7 @@ class Telegram extends Crayner_Machine
 	public function sendPhoto($photo,$to,$reply=null,$op=null)
 	{
 		if(is_string($photo)){
-			if(!(strpos($photo,"http://")!==false)){
+			if(!(strpos($photo,"http://")!==false) and !(strpos($photo,"https://")!==false)){
 				$photo = new CurlFile(realpath($photo));
 			}
 		}
@@ -46,6 +46,6 @@ class Telegram extends Crayner_Machine
 		if(is_array($op)){
 			$post = $this->merge($post,$op);
 		}
-		return $this->qurl($this->url.'/sendPhoto',null,$post);
+		return $this->qurl($this->url.'sendPhoto',null,$post);
 	}
 }

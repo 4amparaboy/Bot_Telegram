@@ -22,10 +22,11 @@ $rep = $a['message']['message_id'];
 		if($st->execute($name,false,$from)){
 			$st = $st->fetch_reply();
 			if(is_array($st)){
-				$this->tel->sendPhoto($st[1],
+				var_dump($st);
+				var_dump($this->tel->sendPhoto($st[1],
 				$from,$rep
-				);
-				$this->tel->sendMessage(
+				));
+				echo $this->tel->sendMessage(
 				$st[2],
 				$from
 				);

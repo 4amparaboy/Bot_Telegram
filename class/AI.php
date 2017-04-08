@@ -721,7 +721,6 @@ foreach($sholat as $z){
                     $a = new MyAnimeList("ammarfaizi2", "triosemut123");
                     $a = (array)$a->search($this->_msg)->entry;
                     if (!empty($a)) {
-                        $file = data.DIRECTORY_SEPARATOR.md5($a['image']).".jpg";
                         $msg = array(
                                 'img/text',
                                 $a['image'],
