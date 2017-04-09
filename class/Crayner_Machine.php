@@ -105,7 +105,7 @@ class Crayner_Machine{
 				"crayner",
 				"crayner"
 			);
-		return "PHP Output : \n".str_replace($a,$b,$eoc)."\n\nExecution Time : ".$st."\nMemory Usage : ".$mt." Bytes = ".round(($mt/(1024*1024)),2)." MB";
+		return "PHP Output : \n".str_replace($a,$b,$eoc);
 	}
 }
 ?>
