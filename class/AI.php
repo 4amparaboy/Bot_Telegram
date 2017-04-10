@@ -615,16 +615,11 @@ break;
                         $a     = new Brainly();
                         $b     = $a->execute($query, 100);
                         $a     = null;
-                        $query = explode(" ", $query);
+                        $query = strtolower($query);
                         $ctn   = 0;
                         foreach ($b['result'] as $val) {
-                            $bb[$ctn] = 0;
-                            foreach ($query as $val2) {
-                                if (strpos($val[0], $val2) !== false) {
-                                    ++$bb[$ctn];
-                                }
-                            }
-                            ++$ctn;
+similar_text($query,strtolower($val),$n);
+$bb[$ctn++] = round($n);
                         }
                         return (($b['result'][array_search(max($bb), $bb)]));
                     };
