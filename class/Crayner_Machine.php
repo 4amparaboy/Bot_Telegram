@@ -105,7 +105,7 @@ class Crayner_Machine{
 				"crayner",
 				"crayner"
 			);
-		return "PHP Output : \n".str_replace($a,$b,$eoc);
+		return str_replace($a,$b,$eoc);
 	}
 }
 ?>

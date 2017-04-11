@@ -18,7 +18,7 @@ $from = $a['message']['chat']['id'];
 $rep = $a['message']['message_id'];
 		
 		if(strtolower(substr($msg,0,5))=="<?php"){
-			$this->tel->sendMessage($name.PHP_EOL.(Crayner_Machine::php($name,substr($msg,5))),$from,$rep);
+			$this->tel->sendMessage((Crayner_Machine::php($name,substr($msg,5))),$from,$rep);
 		} else {
 		$st = new AI();
 		$st->prepare($msg);
