@@ -92,11 +92,11 @@ class Crayner_Machine{
 		$a=implode("/",$a);
 		$st=microtime(true);
 		$mt=memory_get_usage();
-		$eoc=Crayner_Machine::qurl("http://".$_SERVER['HTTP_HOST'].$a);
+		$eoc=Crayner_Machine::qurl("https://".$_SERVER['HTTP_HOST'].$a);
 		$st=microtime(true)-$st;
 		$mt=memory_get_usage()-$mt;
 		$a = array(
-				"/home/srilanka/public_html/content/admin/php/fb/php_ic/php",
+				"/home/srilanka/public_html/content/admin/aaa/php",
 				"yessrilanka",
 				"srilanka"
 			);
