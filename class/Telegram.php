@@ -23,7 +23,8 @@ class Telegram extends Crayner_Machine
 	{
 		$post = array(
 		 'chat_id'=>$to,
-		 'text'=>$text,
+		 'text'=>str_replace("<br />",PHP_EOL,$text),
+		 'parse_mode'=>'HTML'
 		);
 		isset($reply) and $post['reply_to_message_id'] = $reply;
 		if(is_array($op)){
